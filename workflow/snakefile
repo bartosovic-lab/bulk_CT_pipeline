@@ -1,0 +1,97 @@
+include: 'prep'
+include: 'snakefile_complexity'
+
+rule all:
+  input:
+    expand("results/{sample}/fastqc/{sample}_{lane}_{read}.log", sample = sample_list, lane = config['general']['lanes'], read=config['general']['reads']),
+    expand("results/{sample}/fastq_trimmed/{sample}_{lane}_val_1.fq.gz",sample = sample_list, lane = config['general']['lanes']),
+    expand("results/{sample}/bowtie2_out/{sample}_{lane}.bam",sample = sample_list, lane = config['general']['lanes']),
+    expand("results/{sample}/bam_sorted/{sample}_{lane}_sorted.bam",sample = sample_list, lane = config['general']['lanes']),
+    expand("results/{sample}/bam_merged/{sample}_merged.bam",sample = sample_list, lane = config['general']['lanes']),
+    expand("results/{sample}/bigwig/{sample}.bw", sample = sample_list),
+    
+    # snakefile_complexity  
+    'results/duplication_summary.csv',
+    'results/duplication_summary_R1.csv',
+    'results/duplication_summary_R2.csv',
+    expand('results/{sample}/{read}_analysis/bigwig/{sample}.bw', sample = sample_list, read = ['R1']),
+
+
+rule fastqc:
+  input:
+    lambda wildcards: config['samples'][wildcards.sample][wildcards.lane][wildcards.read]
+  output:
+    "results/{sample}/fastqc/{sample}_{lane}_{read}.log"
+  params:
+    outdir = "results/{sample}/fastqc/"
+  shell:
+    """
+    fastqc --fastqc {input} --outdir {params.outdir} > {output} 2>&1
+    """
+
+rule trim_trim_galore:
+  input:
+    lambda wildcards: list(config['samples'][wildcards.sample][wildcards.lane].values())
+  output:
+    "results/{sample}/fastq_trimmed/{sample}_{lane}_val_1.fq.gz",
+    "results/{sample}/fastq_trimmed/{sample}_{lane}_val_2.fq.gz",
+  params:
+    outdir = "results/{sample}/fastq_trimmed/"
+  threads: 8
+  shell:
+    "trim_galore --cores {threads} --paired -o {params.outdir} --basename {wildcards.sample}_{wildcards.lane} {input}"
+
+rule map_bowtie2:
+  input:
+    read1 = "results/{sample}/fastq_trimmed/{sample}_{lane}_val_1.fq.gz",
+    read2 = "results/{sample}/fastq_trimmed/{sample}_{lane}_val_2.fq.gz",
+  output:
+    bam = "results/{sample}/bowtie2_out/{sample}_{lane}.bam",
+    log = "results/{sample}/bowtie2_out/{sample}_{lane}_alignment.log"
+  params:
+    index = config['general']['bowtie2_index']
+  threads: 16
+  shell:
+    """
+    bowtie2 --threads {threads} \
+            --dovetail \
+            -x {params.index} \
+            -1 {input.read1} \
+            -2 {input.read2} 2> {output.log} | samtools view -bS > {output.bam} 
+    """
+
+rule bam_sort_and_index:
+  input:
+    "results/{sample}/bowtie2_out/{sample}_{lane}.bam",
+  output:
+    bam_sorted = "results/{sample}/bam_sorted/{sample}_{lane}_sorted.bam",
+    bam_index  = "results/{sample}/bam_sorted/{sample}_{lane}_sorted.bam.bai",
+  threads: 16
+  shell:
+    "samtools sort -o {output.bam_sorted} -@ {threads} {input} && samtools index {output.bam_sorted} "
+    
+
+rule merge_mapped:
+  input:
+    lambda wildcards: expand("results/{sample}/bam_sorted/{sample}_{lane}_sorted.bam",sample = wildcards.sample, lane = config['general']['lanes'])
+  output:
+    bam   = "results/{sample}/bam_merged/{sample}_merged.bam",
+    index = "results/{sample}/bam_merged/{sample}_merged.bam.bai",
+  threads: 16
+  shell:
+    "samtools merge -@ {threads} {output.bam} {input} && samtools index {output.bam}"
+
+rule bam_to_bigwig:
+  input:
+    "results/{sample}/bam_merged/{sample}_merged.bam",
+  output:
+    "results/{sample}/bigwig/{sample}.bw",
+  threads: 16
+  shell:
+    "bamCoverage -b {input} -o {output} -p {threads} --normalizeUsing RPKM"
+
+
+
+
+
+
