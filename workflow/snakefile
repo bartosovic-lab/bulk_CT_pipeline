@@ -10,13 +10,6 @@ rule all:
     expand("results/{sample}/bam_merged/{sample}_merged.bam",sample = sample_list, lane = config['general']['lanes']),
     expand("results/{sample}/bigwig/{sample}.bw", sample = sample_list),
     
-    # snakefile_complexity  
-    'results/duplication_summary.csv',
-    'results/duplication_summary_R1.csv',
-    'results/duplication_summary_R2.csv',
-    expand('results/{sample}/{read}_analysis/bigwig/{sample}.bw', sample = sample_list, read = ['R1']),
-
-
 rule fastqc:
   input:
     lambda wildcards: config['samples'][wildcards.sample][wildcards.lane][wildcards.read]
