@@ -1,4 +1,4 @@
-include: 'prep'
+include: 'prep.smk'
 include: 'snakefile_complexity'
 
 rule all:
