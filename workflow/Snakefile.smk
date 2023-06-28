@@ -1,49 +1,51 @@
-include: 'prep'
-include: 'snakefile_complexity'
+include: 'prep.smk'
 
 rule all:
   input:
-    expand("results/{sample}/fastqc/{sample}_{lane}_{read}.log", sample = sample_list, lane = config['general']['lanes'], read=config['general']['reads']),
-    expand("results/{sample}/fastq_trimmed/{sample}_{lane}_val_1.fq.gz",sample = sample_list, lane = config['general']['lanes']),
-    expand("results/{sample}/bowtie2_out/{sample}_{lane}.bam",sample = sample_list, lane = config['general']['lanes']),
-    expand("results/{sample}/bam_sorted/{sample}_{lane}_sorted.bam",sample = sample_list, lane = config['general']['lanes']),
-    expand("results/{sample}/bam_merged/{sample}_merged.bam",sample = sample_list, lane = config['general']['lanes']),
-    expand("results/{sample}/bigwig/{sample}.bw", sample = sample_list),
+    expand("out/{sample}/fastqc/{sample}_{lane}_{read}_fastqc.log", sample = sample_list, lane = config['general']['lanes'], read=config['general']['reads']),
+    expand("out/{sample}/{sample}_{lane}_mapped.bam",sample = sample_list, lane = config['general']['lanes']),
+    # expand("results/{sample}/bam_sorted/{sample}_{lane}_sorted.bam",sample = sample_list, lane = config['general']['lanes']),
+    # expand("results/{sample}/bam_merged/{sample}_merged.bam",sample = sample_list, lane = config['general']['lanes']),
+    # expand("results/{sample}/bigwig/{sample}.bw", sample = sample_list),
     
 rule fastqc:
   input:
     lambda wildcards: config['samples'][wildcards.sample][wildcards.lane][wildcards.read]
   output:
-    "results/{sample}/fastqc/{sample}_{lane}_{read}.log"
+    "out/{sample}/fastqc/{sample}_{lane}_{read}_fastqc.log"
   params:
-    outdir = "results/{sample}/fastqc/"
+    outdir = "out/{sample}/"
+  conda: "../envs/bulkCT_fastqc.yaml"
   shell:
-    """
-    fastqc --fastqc {input} --outdir {params.outdir} > {output} 2>&1
-    """
+    "fastqc {input} --outdir {params.outdir} --nogroup > {output}"
 
 rule trim_trim_galore:
   input:
     lambda wildcards: list(config['samples'][wildcards.sample][wildcards.lane].values())
   output:
-    "results/{sample}/fastq_trimmed/{sample}_{lane}_val_1.fq.gz",
-    "results/{sample}/fastq_trimmed/{sample}_{lane}_val_2.fq.gz",
+    temp("out/{sample}/{sample}_{lane}_val_1.fq.gz"),
+    temp("out/{sample}/{sample}_{lane}_val_2.fq.gz"),
   params:
-    outdir = "results/{sample}/fastq_trimmed/"
+    outdir = "out/{sample}/"
+  conda: "../envs/bulkCT_trim.yaml"
   threads: 8
+  resources:
+    mem_mb = 8000
   shell:
     "trim_galore --cores {threads} --paired -o {params.outdir} --basename {wildcards.sample}_{wildcards.lane} {input}"
 
 rule map_bowtie2:
   input:
-    read1 = "results/{sample}/fastq_trimmed/{sample}_{lane}_val_1.fq.gz",
-    read2 = "results/{sample}/fastq_trimmed/{sample}_{lane}_val_2.fq.gz",
+    read1 = "out/{sample}/{sample}_{lane}_val_1.fq.gz",
+    read2 = "out/{sample}/{sample}_{lane}_val_2.fq.gz",
   output:
-    bam = "results/{sample}/bowtie2_out/{sample}_{lane}.bam",
-    log = "results/{sample}/bowtie2_out/{sample}_{lane}_alignment.log"
+    bam = "out/{sample}/{sample}_{lane}_mapped.bam",
+    log = "out/{sample}/{sample}_{lane}_bowtie2_map.log"
   params:
     index = config['general']['bowtie2_index']
+  conda: "../envs/bulkCT_map.yaml"
   threads: 16
+  mem_mb= 32000
   shell:
     """
     bowtie2 --threads {threads} \
