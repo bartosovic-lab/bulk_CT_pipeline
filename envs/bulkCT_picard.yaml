@@ -15,7 +15,7 @@ dependencies:
   - c-ares=1.19.0=h5eee18b_0
   - ca-certificates=2023.05.30=h06a4308_0
   - cairo=1.16.0=hb05425b_4
-  - curl=7.88.1=h5eee18b_1
+  - curl=7.88.1=h5eee18b_0
   - dbus=1.13.18=hb2f20db_0
   - expat=2.4.9=h6a678d5_0
   - fontconfig=2.14.1=h4c34cd2_2
@@ -33,10 +33,10 @@ dependencies:
   - icu=58.2=he6710b0_3
   - jpeg=9e=h5eee18b_1
   - kernel-headers_linux-64=3.10.0=h57e8cba_10
-  - krb5=1.20.1=h143b758_1
+  - krb5=1.19.4=h568e23c_0
   - ld_impl_linux-64=2.38=h1181459_1
   - lerc=3.0=h295c915_0
-  - libcurl=7.88.1=h251f7ec_1
+  - libcurl=7.88.1=h91b91d3_0
   - libdeflate=1.17=h5eee18b_0
   - libedit=3.1.20221030=h5eee18b_0
   - libev=4.33=h7f8727e_1
@@ -46,10 +46,10 @@ dependencies:
   - libgfortran-ng=11.2.0=h00389a5_1
   - libgfortran5=11.2.0=h1234567_1
   - libgomp=11.2.0=h1234567_1
-  - libnghttp2=1.52.0=h2d74bed_1
+  - libnghttp2=1.52.0=ha637b67_1
   - libopenblas=0.3.21=h043d6bf_0
   - libpng=1.6.39=h5eee18b_0
-  - libssh2=1.10.0=hdbd6064_2
+  - libssh2=1.10.0=h37d81fd_2
   - libstdcxx-devel_linux-64=11.2.0=h1234567_1
   - libstdcxx-ng=11.2.0=h1234567_1
   - libtiff=4.5.0=h6a678d5_2
@@ -61,7 +61,7 @@ dependencies:
   - make=4.2.1=h1bed415_1
   - ncurses=6.4=h6a678d5_0
   - openjdk=11.0.13=h87a67e3_0
-  - openssl=3.0.9=h7f8727e_0
+  - openssl=1.1.1u=h7f8727e_0
   - pango=1.50.7=h05da053_0
   - pcre=8.45=h295c915_0
   - pcre2=10.37=he7ceb23_1
@@ -69,9 +69,10 @@ dependencies:
   - pixman=0.40.0=h7f8727e_1
   - r-base=4.2.0=h1ae530e_0
   - readline=8.2=h5eee18b_0
+  - samtools=1.6=hb116620_7
   - sysroot_linux-64=2.17=h57e8cba_10
   - tk=8.6.12=h1ccaba5_0
   - tktable=2.10=h14c3975_0
-  - xz=5.4.2=h5eee18b_0
+  - xz=5.2.10=h5eee18b_1
   - zlib=1.2.13=h5eee18b_0
   - zstd=1.5.5=hc292b87_0

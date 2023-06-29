@@ -1,5 +1,6 @@
 # bulk CUT&Tag data analysis pipeline 
 Standard pipeline to map CUT&amp;Tag data and generate genome browser tracks
+
 Marek Bartosovic 
 
 The pipeline assumes the standard Illumina naming convention of the fastq files:
@@ -19,7 +20,8 @@ git clone https://github.com/bartosovic-lab/bulk_CT_pipeline
 
 ## Step 2 - generate config file 
 
-Create config file in yaml format 
+Create config file in yaml format.
+
 Minimal config file should look like this:
 ```
 general:
@@ -46,13 +48,15 @@ You can use pipeline script to generate config:
 
 ```python3 bulk_CT_pipeline/scripts/generate_config.py /PATH/TO/FOLDER_WITH_FASTQ_FILES > config.yaml```
 
-The script will search for all ```*.fastq.gz ``` files in the nested folder and from _LXXX_ and _RXXX_ determine R1 and R2 
+The script will search for all ```*.fastq.gz ``` files in the nested folder and from _LXXX_ and _RXXX_ determine L001/L002 files and  R1/R2 files 
 
-#### Important:  After generating the config check that all needed files are present in thefile
+#### Important:  After generating the config check that all needed files are present in the file
 #### Important: Change the path to the bowtie2 index within the pipeline config file
 You can always edit the paths or any mistakes in the config file manualy or write your own script to generate config file
 
 ## Step 3 - setup slurm profile for batch job submission (Optional)
+
+### This only needs to be done once for server, and the same profile can be reused by other snakemake pipelines
 
 If running on rackham, create slurm profile for snakemake so the jobs can be submitted into the slurm queue by snakemake
 
@@ -73,17 +77,6 @@ profile_name [slurm]: slurm_rackham
 Select use_singularity:
 1 - False
 2 - True
-Choose from 1, 2 [1]: 2
-Select use_conda:
-1 - False
-2 - True
-Choose from 1, 2 [1]: ^CAborted!
-(base) [marek@rackham4 Thermo_Abs]$ cookiecutter --output-dir "$profile_dir" "$template"
-You've downloaded /home/marek/.cookiecutters/slurm before. Is it okay to delete and re-download it? [yes]: yes
-profile_name [slurm]: slurm_rackham
-Select use_singularity:
-1 - False
-2 - True
 Choose from 1, 2 [1]: 1
 Select use_conda:
 1 - False
@@ -98,7 +91,7 @@ Select print_shell_commands:
 1 - False
 2 - True
 Choose from 1, 2 [1]: 2
-sbatch_defaults []: account=snic2022-22-1062 time=0-24:00 partition=core ntasks=1 output=logs/slurm_%j.out error=logs/slurm_%j.err
+sbatch_defaults []: account=snic2022-**** time=0-24:00 partition=core ntasks=1 output=logs/slurm_%j.out error=logs/slurm_%j.err
 cluster_sidecar_help [Use cluster sidecar. NB! Requires snakemake >= 7.0! Enter to continue...]: 
 Select cluster_sidecar:
 1 - yes

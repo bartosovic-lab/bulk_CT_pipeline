@@ -46,7 +46,7 @@ rule map_bowtie2:
   conda: "../envs/bulkCT_map.yaml"
   threads: 16
   resources:
-      mem_mb= 32000
+    mem_mb= 32000
   shell:
     """
     bowtie2 --threads {threads} \
@@ -94,7 +94,8 @@ rule picard_rmduplicates:
     mem_mb=16000
   shell:
     "PICARD=`which picard`;"
-    "$PICARD MarkDuplicates -I {input.bam} -O {output.bam} -M {output.metrics} --REMOVE_DUPLICATES"
+    "$PICARD MarkDuplicates -I {input.bam} -O {output.bam} -M {output.metrics} --REMOVE_DUPLICATES; "
+    "samtools index {output.bam}"
 
 rule bam_to_bigwig:
   input:
