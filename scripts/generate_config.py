@@ -48,15 +48,6 @@ def format_config(config_dict):
         print("      {}:".format(read),end = " ")
         print("  {}".format("\n".join([curr_files[x].path for x in range(0,len(curr_files)) if curr_files[x].lane == lane and curr_files[x].read == read])))
 
-    # Print lanes summary
-    print("    lanes:")
-    for lane in sorted(list(set(lanes))):
-      print("      - {}".format(lane))
-
-    # Print reads summary
-    print('    reads:')
-    for read in reads_ls:
-      print("      - {}".format(read))
 
 def print_general_config():
   print("general:")

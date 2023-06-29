@@ -1,0 +1,16 @@
+general:
+  lanes:
+    - L001
+    - L002
+  reads:
+    - R1
+    - R2
+  bowtie2_index: /proj/snic2022-23-547/private/marek/reference/GRCh38/bowtie2_illumin_iGenomes/Homo_sapiens/NCBI/GRCh38/Sequence/Bowtie2Index/genome
+samples:
+  P27054_1001:
+    L001:
+      R1:   /crex/proj/snic2022-23-547/private/marek/Thermo_Abs/P27054/P27054_1001/02-FASTQ/220817_A00621_0730_AH7F2GDRX2/P27054_1001_S1_L001_R1_001.fastq.gz
+      R2:   /crex/proj/snic2022-23-547/private/marek/Thermo_Abs/P27054/P27054_1001/02-FASTQ/220817_A00621_0730_AH7F2GDRX2/P27054_1001_S1_L001_R2_001.fastq.gz
+    L002:
+      R1:   /crex/proj/snic2022-23-547/private/marek/Thermo_Abs/P27054/P27054_1001/02-FASTQ/220817_A00621_0730_AH7F2GDRX2/P27054_1001_S1_L002_R1_001.fastq.gz
+      R2:   /crex/proj/snic2022-23-547/private/marek/Thermo_Abs/P27054/P27054_1001/02-FASTQ/220817_A00621_0730_AH7F2GDRX2/P27054_1001_S1_L002_R2_001.fastq.gz
