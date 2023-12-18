@@ -40,7 +40,7 @@ rule map_bowtie2:
     read2 = "out/{sample}/trimming/{sample}_{lane}_val_2.fq.gz",
   output:
     bam = temp("out/{sample}/{sample}_{lane}_mapped.bam"),
-    log = "out/logs/{sample}/{sample}_{lane}_bowtie2_map.log"
+    log = "out/{sample}/logs/{sample}_{lane}_bowtie2_map.log"
   params:
     index = config['general']['bowtie2_index']
   conda: "../envs/bulkCT_map.yaml"

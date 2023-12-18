@@ -1,5 +1,7 @@
 import os
 
+print(config)
+
 sample_list         = [x for x in config['samples'].keys()]
 lanes               = config['general']['lanes']
 reads               = config['general']['reads']
