@@ -1,9 +1,7 @@
 name: bulkCT_deeptools
 channels:
-  - file:///sw/apps/conda/latest/rackham/local_repo/main
   - bioconda
-  - file:///sw/apps/conda/latest/rackham/local_repo/conda-forge
-  - defaults
+  - conda-forge
 dependencies:
   - _libgcc_mutex=0.1=conda_forge
   - _openmp_mutex=4.5=2_gnu

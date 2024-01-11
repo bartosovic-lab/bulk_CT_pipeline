@@ -6,6 +6,8 @@ general:
     - R1
     - R2
   bowtie2_index: /proj/snic2022-23-547/private/marek/reference/GRCh38/bowtie2_illumin_iGenomes/Homo_sapiens/NCBI/GRCh38/Sequence/Bowtie2Index/genome
+  genome: hg38  # hg19, hg38 and mm10 supported
+  output_dir: 'out'
 samples:
   P27054_1001:
     L001:
