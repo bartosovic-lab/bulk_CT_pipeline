@@ -64,34 +64,54 @@ For instructions how to do this follow:
 https://github.com/Snakemake-Profiles/slurm
 
 Here is how the setup looks for Rackham
-```angular2html
+```
 profile_dir="${HOME}/.config/snakemake"
 template="gh:Snakemake-Profiles/slurm"
 
 mkdir -p "$profile_dir"
 
-# Here you get prompted several times
+# Run:
 cookiecutter --output-dir "$profile_dir" "$template"
+
+# Here you get prompted several times
+
 You've downloaded /home/marek/.cookiecutters/slurm before. Is it okay to delete and re-download it? [yes]: yes
-profile_name [slurm]: slurm_rackham
+
+profile_name [slurm]: slurm
+
 Select use_singularity:
 1 - False
 2 - True
 Choose from 1, 2 [1]: 1
+
 Select use_conda:
 1 - False
 2 - True
 Choose from 1, 2 [1]: 2
+
 jobs [500]:    
+<enter>
+
 restart_times [0]: 0
+<enter>
+
 max_status_checks_per_second [10]: 
+<enter>
+
 max_jobs_per_second [10]: 
+<enter>
+
 latency_wait [5]: 
+<enter>
+
 Select print_shell_commands:
 1 - False
 2 - True
 Choose from 1, 2 [1]: 2
-sbatch_defaults []: account=snic2022-**** time=0-24:00 partition=core ntasks=1 output=logs/slurm_%j.out error=logs/slurm_%j.err
+
+# In this one it's imporant to insert the correct account name
+sbatch_defaults []: account=<naiss2023-22-***> time=0-24:00 partition=shared output=logs/slurm_%j.out error=logs/slurm_%j.err
+
 cluster_sidecar_help [Use cluster sidecar. NB! Requires snakemake >= 7.0! Enter to continue...]: 
 Select cluster_sidecar:
 1 - yes
