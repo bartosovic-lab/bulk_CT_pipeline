@@ -16,7 +16,7 @@ rule fastqc:
     "{out}/{sample}/fastqc/{sample}_{lane}_{read}_fastqc.log"
   params:
     outdir = "{out}/{sample}/fastqc/"
-  conda: "../envs/bulkCT_fastqc.yaml"
+  conda: "../envs/bulkCT.yaml"
   shell:
     "fastqc {input} --outdir {params.outdir} --nogroup > {output}"
 
@@ -28,7 +28,7 @@ rule trim_trim_galore:
     temp("{out}/{sample}/trimming/{sample}_{lane}_val_2.fq.gz"),
   params:
     outdir = "{out}/{sample}/trimming/"
-  conda: "../envs/bulkCT_trim.yaml"
+  conda: "../envs/bulkCT.yaml"
   threads: 8
   resources:
     mem_mb = 8000
@@ -44,7 +44,7 @@ rule map_bowtie2:
     log = "{out}/{sample}/logs/{sample}_{lane}_bowtie2_map.log"
   params:
     index = config['general']['bowtie2_index']
-  conda: "../envs/bulkCT_map.yaml"
+  conda: "../envs/bulkCT.yaml"
   threads: 16
   resources:
     mem_mb= 32000
@@ -59,7 +59,7 @@ rule map_bowtie2:
 rule download_blacklist:
   output:
     blacklist_path
-  conda: "../envs/bulkCT_download.yaml"
+  conda: "../envs/bulkCT.yaml"
   shell:
     download_blacklist(config)[1]
 
@@ -69,7 +69,7 @@ rule bam_remove_blacklist_reads:
     blacklist = blacklist_path
   output:
     bam = temp("{out}/{sample}/{sample}_{lane}_mapped_blacklist_removed.bam")
-  conda: "../envs/bulkCT_bedtools.yaml"
+  conda: "../envs/bulkCT.yaml"
   threads: 1
   resources:
     mem_mb=32000
@@ -83,7 +83,7 @@ rule bam_sort_and_index:
     bam_sorted = temp("{out}/{sample}/{sample}_{lane}_sorted.bam"),
     bam_index  = temp("{out}/{sample}/{sample}_{lane}_sorted.bam.bai"),
   threads: 16
-  conda: "../envs/bulkCT_map.yaml"
+  conda: "../envs/bulkCT.yaml"
   resources:
     mem_mb=32000
   shell:
@@ -97,7 +97,7 @@ rule merge_mapped:
     bam   = temp("{out}/{sample}/{sample}_merged.bam"),
     index = temp("{out}/{sample}/{sample}_merged.bam.bai"),
   threads: 16
-  conda: "../envs/bulkCT_map.yaml"
+  conda: "../envs/bulkCT.yaml"
   resources:
     mem_mb=32000
   shell:
@@ -110,7 +110,7 @@ rule picard_rmduplicates:
     bam     = "{out}/{sample}/{sample}_merged_nodup.bam",
     index   = "{out}/{sample}/{sample}_merged_nodup.bam.bai",
     metrics = "{out}/{sample}/{sample}_marked_dup_metrics.txt"
-  conda: "../envs/bulkCT_picard.yaml"
+  conda: "../envs/bulkCT.yaml"
   resources:
     mem_mb=32000
   shell:
@@ -123,7 +123,7 @@ rule bam_to_bigwig:
     "{out}/{sample}/{sample}_{suffix}.bam",
   output:
     "{out}/{sample}/{sample}_{suffix}.bw",
-  conda: "../envs/bulkCT_deeptools.yaml"
+  conda: "../envs/bulkCT.yaml"
   threads: 16
   resources:
     mem_mb=32000
