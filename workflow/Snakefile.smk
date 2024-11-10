@@ -1,6 +1,8 @@
 include: 'prep.smk'
+include: 'complexity.smk'
 
 blacklist_path = download_blacklist(config)[0]
+subsample_fraction = [0.025,0.05,0.1,0.2, 0.3, 0.4, 0.5,0.6,0.7,0.8,0.9]        
 
 rule all:
   input:
@@ -8,6 +10,9 @@ rule all:
     expand("{out}/{sample}/{sample}_merged_nodup.bam", out = config['general']['output_dir'], sample = sample_list, lane = config['general']['lanes']),
     expand("{out}/{sample}/{sample}_merged_nodup.bw",out = config['general']['output_dir'], sample = sample_list),
     expand("{out}/{sample}/{sample}_peaks.broadPeak",out = config['general']['output_dir'], sample = sample_list),
+    expand("{out}/{sample}/{sample}_down_{fraction}.bam", out = config['general']['output_dir'], sample = sample_list, fraction = subsample_fraction),
+    expand("{out}/{sample}/downsample_report.txt", out = config['general']['output_dir'], sample = sample_list),
+
     
 rule fastqc:
   input:
@@ -94,8 +99,8 @@ rule merge_mapped:
   input:
     lambda wildcards: expand("{out}/{sample}/{sample}_{lane}_sorted.bam",out=config['general']['output_dir'],sample = wildcards.sample, lane = config['general']['lanes'])
   output:
-    bam   = temp("{out}/{sample}/{sample}_merged.bam"),
-    index = temp("{out}/{sample}/{sample}_merged.bam.bai"),
+    bam   = "{out}/{sample}/{sample}_merged.bam",
+    index = "{out}/{sample}/{sample}_merged.bam.bai",
   threads: 16
   conda: "../envs/bulkCT.yaml"
   resources:
