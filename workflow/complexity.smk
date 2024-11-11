@@ -31,5 +31,6 @@ rule report_aggregate:
     params:
         script = workflow.basedir + "/../scripts/get_percent_duplication.R",
         outdir = "{out}/{sample}/complexity/"
+    conda: "../envs/bulkCT.yaml"
     shell:
         "Rscript {params.script} -i {input.downsampled} {input.full_bam} -o {params.outdir} "
