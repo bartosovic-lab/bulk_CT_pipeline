@@ -10,8 +10,8 @@ rule all:
     expand("{out}/{sample}/{sample}_merged_nodup.bam", out = config['general']['output_dir'], sample = sample_list, lane = config['general']['lanes']),
     expand("{out}/{sample}/{sample}_merged_nodup.bw",out = config['general']['output_dir'], sample = sample_list),
     expand("{out}/{sample}/{sample}_peaks.broadPeak",out = config['general']['output_dir'], sample = sample_list),
-    expand("{out}/{sample}/{sample}_down_{fraction}.bam", out = config['general']['output_dir'], sample = sample_list, fraction = subsample_fraction),
-    expand("{out}/{sample}/downsample_report.txt", out = config['general']['output_dir'], sample = sample_list),
+    # expand("{out}/{sample}/complexity/{sample}_down_{fraction}.bam", out = config['general']['output_dir'], sample = sample_list, fraction = subsample_fraction),
+    expand("{out}/{sample}/complexity/duplicates_table.tsv", out = config['general']['output_dir'], sample = sample_list),
 
     
 rule fastqc:
