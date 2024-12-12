@@ -6,6 +6,8 @@ rule downscale_bam:
         bam   = temp("{out}/{sample}/complexity/{sample}_down_{fraction}.bam"),
         index = temp("{out}/{sample}/complexity/{sample}_down_{fraction}.bam.bai"),
     conda: "../envs/bulkCT.yaml"
+    resources:
+        mem_mb = 8000
     shell:
         "samtools view -h -s {wildcards.fraction} {input.bam} | samtools view -bS > {output.bam}; "
         "samtools index {output.bam} -o {output.index}"
@@ -15,7 +17,9 @@ rule  picard_duplicates_downscaled:
         bam   = "{out}/{sample}/complexity/{sample}_down_{fraction}.bam",
     output:
         bam      = temp("{out}/{sample}/complexity/{sample}_down_{fraction}_picard_dups.bam"),
-        report   = temp("{out}/{sample}/complexity/{sample}_down_{fraction}_report.txt")   ,
+        report   = temp("{out}/{sample}/complexity/{sample}_down_{fraction}_report.txt"),
+    resources:
+        mem_mb = 32000
     conda: "../envs/bulkCT.yaml"
     shell:
         "picard MarkDuplicates -I {input.bam} -O {output.bam} -M {output.report}"
