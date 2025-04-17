@@ -67,8 +67,8 @@ general:
     - R1
     - R2
   bowtie2_index: /data/references/bowtie/hg38/GRCh38_noalt_as
-  genome: hg38
-  output_dir: out
+  genome: hg38       # Accepted options are hg38, hg19 or mm10
+  output_dir: out 
 samples:
   P27054_1001:
     L001:
