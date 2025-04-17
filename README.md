@@ -66,9 +66,9 @@ general:
   reads:
     - R1
     - R2
-  bowtie2_index: /proj/snic2022-23-547/private/marek/reference/GRCh38/bowtie2_illumin_iGenomes/Homo_sapiens/NCBI/GRCh38/Sequence/Bowtie2Index/genome # Your path to bowtie2 index
-  genome: hs
-  output_dir: out/
+  bowtie2_index: /data/references/bowtie/hg38/GRCh38_noalt_as
+  genome: hg38
+  output_dir: out
 samples:
   P27054_1001:
     L001:
