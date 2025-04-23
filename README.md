@@ -189,3 +189,47 @@ Run the pipeline :
 Note: pipeline was built and tested on snakemake version 7.32.4, check that you snakemake version matches.
 
 Snakemake is frequently updated and command line arguments may differ between versions
+
+## Step 5 motif analysis
+
+Motif analysis using meme is not part of the main pipeline, but can be run manualy for all or subset of samples. 
+
+To run on a subset of samples create a new config.yaml with samples you want to run motifs for. 
+
+
+Changes to original config.yaml
+ - general: genome_fa   # path to fasta file with genome sequence
+ - general: jaspar_db   # path to jaspar db file (e.g. https://jaspar.elixir.no/download/data/2024/CORE/JASPAR2024_CORE_non-redundant_pfms_meme.txt)
+
+### Example config_motifs.yaml
+
+```
+general:
+  lanes:
+    - L001
+    - L002
+  reads:
+    - R1
+    - R2
+  bowtie2_index: /data/references/bowtie/hg38/GRCh38_noalt_as/GRCh38_noalt_as
+  genome: hg38  # hg19 and mm10 also accepted
+  output_dir: out
+  genome_fa: ~/references/refdata-cellranger-arc-GRCh38-2020-A-2.0.0/fasta/genome.fa
+  jaspar_db: /data/references/jaspar/JASPAR2024_CORE_non-redundant_pfms_meme.txt
+samples:
+  P34957_1011:
+    L001:
+      R1:   /data/mareba/DataDelivery_2025-04-15_12-06-33_ngisthlm01479/files/P34957/P34957_1011/02-FASTQ/20250410_LH00217_0197_B227JYNLT1/P34957_1011_S11_L001_R1_001.fastq.gz
+      R2:   /data/mareba/DataDelivery_2025-04-15_12-06-33_ngisthlm01479/files/P34957/P34957_1011/02-FASTQ/20250410_LH00217_0197_B227JYNLT1/P34957_1011_S11_L001_R3_001.fastq.gz
+    L002:
+      R1:   /data/mareba/DataDelivery_2025-04-15_12-06-33_ngisthlm01479/files/P34957/P34957_1011/02-FASTQ/20250410_LH00217_0197_B227JYNLT1/P34957_1011_S11_L002_R1_001.fastq.gz
+      R2:   /data/mareba/DataDelivery_2025-04-15_12-06-33_ngisthlm01479/files/P34957/P34957_1011/02-FASTQ/20250410_LH00217_0197_B227JYNLT1/P34957_1011_S11_L002_R3_001.fastq.gz
+
+```
+
+## Run the motif pipeline
+
+```
+snakemake --snakefile ~/bulk_CT_pipeline/workflow/motifs.smk --cores 20 --jobs 10 -p --configfile config_motifs.yaml
+ --rerun-incomplete --use-conda --conda-frontend conda --keep-going
+```
