@@ -68,6 +68,8 @@ def print_general_config():
   print("  lanes:\n    - L001\n    - L002")
   print("  reads:\n    - R1\n    - R2")
   print("  bowtie2_index: FILL_IN_PATH_TO_BOWTIE2_INDEX_HERE")
+  print("  genome: hg38  # hg19 and mm10 also accepted")
+  print("  output_dir: out")
 
 def main(path, extension):
   print(path+extension)
